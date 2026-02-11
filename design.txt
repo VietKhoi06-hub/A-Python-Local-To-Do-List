@@ -24,14 +24,14 @@ Step 3: A way to save the list under the form of a txt file.
 Step 4: Design command to interact with the list.
 
 Operation:
-NAME			COMMAND			OPERAND
-add 			:add			taskName
-remove			:remove			index
-tickOff			:tick			index
-change			:rename			index	taskName
-setFileName		:setFileName		fileName
-open			:open			fileName
-close			:close
+NAME			COMMAND			OPERAND			INDEX
+add			:add			taskName		0
+remove			:remove			index			1		
+tickOff			:tick			index			2
+change			:rename			index	taskName	3
+setFileName		:setFileName		fileName		4
+open			:open			fileName		5
+close			:close						6
 
 Structure of the file
 - FileName
