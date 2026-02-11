@@ -1,0 +1,18 @@
+- Save each list in the form of a txt file.
+- The  name for the file will also the identifier.
+
+- The structure of list:
++ The tasks
++ The number of tasks
+
+-The structure of a task:
++ The content
++ The status
+
+- Use command to modify the list
+:tick + number : to tick off the <number> element in the list.
+:w
+
+Step 1: Create the structure of a task and a list.
+Step 2: A way to save the list under the form of a txt file.
+Step 3: Design command to interact with the list.
