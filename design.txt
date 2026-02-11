@@ -13,6 +13,28 @@
 :tick + number : to tick off the <number> element in the list.
 :w
 
+# COMMAND INTERPRETER
+The command interpreter needs to read the input, parse the input, modify the list based on the command.
+Need to have access to the list
+=> Make the list an attribute of the interpreter
+
 Step 1: Create the structure of a task and a list.
-Step 2: A way to save the list under the form of a txt file.
-Step 3: Design command to interact with the list.
+Step 2: A command interpreter to understand the command.
+Step 3: A way to save the list under the form of a txt file.
+Step 4: Design command to interact with the list.
+
+Operation:
+NAME			COMMAND			OPERAND
+add 			:add			taskName
+remove			:remove			index
+tickOff			:tick			index
+change			:rename			index	taskName
+setFileName		:setFileName		fileName
+open			:open			fileName
+close			:close
+
+Structure of the file
+- FileName
+- Status of the task + Content of the task
++ 0: untick	1 : tick
+
