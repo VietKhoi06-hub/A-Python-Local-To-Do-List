@@ -20,7 +20,7 @@ class Task:
         self.content = content
     
     def __str__(self):
-        return (f"The content: {self.getContent()}")
+        return (f"{self.getContent()}")
 
 #Structure of a list
 class List:
@@ -54,18 +54,35 @@ class List:
         if (index >= len(self.array)):
             raise Exception("List :: renametask : Incorrect index!")
         else:
-            self.array[index].setName(name)
+            self.array[index].setContent(name)
 
 
     def __str__(self):
         li  = []
+        li.append("\n\n--------------------------------------------\n\n")
         li.append(f"TO-DO-LIST: {self.name}")
+        li.append(f"No. \t Status \t\t Task")
         for i in range (len(self.array)):
-            li.append(f"{i}. {self.array[i].getContent()}")
+            if (self.array[i].getStatus() == False):
+                state = "Undone"
+            else: 
+                state = "Done"
+            li.append(f"{i}. \t {state} \t\t {self.array[i].getContent()}") 
+        li.append("\n\n--------------------------------------------\n\n")
         return "\n".join(li)
 
+    def getString(self):
+        li = []
+        li.append(f"{self.getName()}\n")
+        for task in self.array:
+            if (task.getStatus() == False):
+                state = 0
+            else:
+                state = 1
+            li.append(f"{state} {task.getContent()}\n")
+        return "".join(li)
 
-operator = {":add" : 0, ":remove" : 1, ":tick" : 2, ":rename" : 3, "setFileName" : 4, ":open" : 5, ":close" : 6}
+operator = {":add" : 0, ":remove" : 1, ":tick" : 2, ":rename" : 3, ":setFileName" : 4, ":open" : 5, ":close" : 6}
 
 
 class Interpreter:
@@ -78,63 +95,70 @@ class Interpreter:
         parse = command.split(" ")
         op = parse[0]
         parse.pop(0)
-        execute(op, parse)
+        self.execute(op, parse)
 
     def execute(self, op, li):
         val = operator.get(op)
         match val:
             case 0: #Add a task
-                self.to_do_list.addTask(" ".join.li)
+                self.to_do_list.addTask(" ".join(li))
             case 1: #Remove a task
-                s = "".join.li
+                s = "".join(li)
                 if (s.isnumeric()):
                     self.to_do_list.removeTask(int(s))
                 else:
                     print("Invalid operand to remove the task!")
             case 2: #Tick off a Task
-                s = "".join.li
+                s = "".join(li)
                 if (s.isnumeric()):
                     self.to_do_list.tickOffTask(int(s))
             case 3: #Rename Task
                 idx = li[0]
+                if (li[0].isnumeric()):
+                    idx = int(li[0])
+                else:
+                    print("Invalid index to rename Task!")
+                    return
                 li.pop(0)
                 s = " ".join(li)
                 self.to_do_list.renameTask(idx, s)
             case 4: #setListName
-                s = " ".join.li
+                s = " ".join(li)
                 self.to_do_list.setName(s)
             case 5:   #Open file
-                location = " ".join.li + ".txt"
+                location = "".join(li) + ".txt"
                 self.fileName = location
-                with open(location, 'r') as file:
-                    counter = 0
-                    for line in file:
-                        if (counter == 0):
-                            self.to_do_list.setName(line.strip())
-                            counter += 1
-                        else:
-                            state = line[0: line.find(" ")]
-                            content = line[line.find(" ") + 1:]
-                            if (state == "0"):
-                                state = False
+                try:
+                    file = open(location, "x")
+                except:
+                    print(f"NOTE: File {location} already existed")
+                else:
+                    print(f"NOTE: File {location} has been created")
+                    file.close()
+                finally:
+                    with open(location, "r") as file:
+                        counter = 0
+                        for line in file:
+                            if (counter == 0):
+                                self.to_do_list.setName(line.strip())
+                                counter += 1
                             else:
-                                state = True
-                            task = Task(content)
-                            task.setStatus(status)
-                            self.to_do_list.append(task)
+                                state = line[0: line.find(" ")]
+                                content = line[line.find(" ") + 1:]
+                                if (state == "0"):
+                                    state = False
+                                else:
+                                    state = True
+                                task = Task(content)
+                                task.setStatus(state)
+                                self.to_do_list.addTask(task)
 
             case 6: #Close a file
                 fileName = self.fileName
                 with open(fileName, 'w') as file:
-                    file.write(self.to_do_list.getName() + "\n")
-                    for task in self.to_do_list:
-                        if (task.getStatus() == False):
-                            state = 0
-                        else:
-                            state = 1
-                        file.write(f"{{state} {task.getName()}\n")
-
+                    file.write(self.to_do_list.getString())
+    
             case None:
-                print("Unsupported command")
-
-
+                print("NOTE: Unsupported command")
+                return
+        print(self.to_do_list)    
