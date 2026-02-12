@@ -1,4 +1,4 @@
-    # A TO-DO-LIST
+# A TO-DO-LIST
  This is a to-do-list program, which can be run in local and deliver necessary functions of a to-do-list.
  
 ## Install and run the program
