@@ -12,8 +12,10 @@ def main():
     :remove index               : to remove the task at index
     :tick index                 : to tick off the task at index
     :setFileName fileName       : to setFileName
+    :deleteFile  fileName       : to delete a file
     -------------------------------------------------
           ''')
+    struct.validateDataFolder()
     while(True):
         line = input("Please enter the command: ")
         if (line == ":q"):

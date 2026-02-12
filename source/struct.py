@@ -1,3 +1,4 @@
+import os
 #Structure of a task
 class Task:
     def __init__(self, content):
@@ -82,7 +83,7 @@ class List:
             li.append(f"{state} {task.getContent()}\n")
         return "".join(li)
 
-operator = {":add" : 0, ":remove" : 1, ":tick" : 2, ":rename" : 3, ":setFileName" : 4, ":open" : 5, ":close" : 6}
+operator = {":add" : 0, ":remove" : 1, ":tick" : 2, ":rename" : 3, ":setFileName" : 4, ":open" : 5, ":close" : 6, ":deleteFile" : 7}
 
 
 class Interpreter:
@@ -126,17 +127,17 @@ class Interpreter:
                 s = " ".join(li)
                 self.to_do_list.setName(s)
             case 5:   #Open file
-                location = "".join(li) + ".txt"
+                location = "".join(li)
                 self.fileName = location
+                filepath = os.path.join(getDataPath(), location)
                 try:
-                    file = open(location, "x")
+                    file = open(filepath, "x")
                 except:
-                    print(f"NOTE: File {location} already existed")
+                    pass
                 else:
-                    print(f"NOTE: File {location} has been created")
                     file.close()
                 finally:
-                    with open(location, "r") as file:
+                    with open(filepath, "r") as file:
                         counter = 0
                         for line in file:
                             if (counter == 0):
@@ -157,8 +158,43 @@ class Interpreter:
                 fileName = self.fileName
                 with open(fileName, 'w') as file:
                     file.write(self.to_do_list.getString())
-    
+                currentpath = getDataPath()
+                print("\n\n---------------CURRENT EXISTED TO-DO-LIST FILES--------------------")
+                getDirContent(currentpath)
+                print("\n\n-------------------------------------------------------------------\n\n") 
+                return
+
+            case 7: #Delete a file
+                fileName = "".join(li)
+                filePath = os.path.join(getDataPath(), fileName)
+                if (os.path.isfile(filePath) == True):
+                    os.remove(filePath)
+                else:
+                    print("NOTE: {fileName} does not exist!")
+                print("\n\n---------------CURRENT EXISTED TO-DO-LIST FILES--------------------")
+                getDirContent(getDataPath())
+                print("\n\n-------------------------------------------------------------------\n\n") 
+                return
+
             case None:
                 print("NOTE: Unsupported command")
                 return
         print(self.to_do_list)    
+
+def getDataPath():
+    currentpath = os.getcwd()
+    datapath = os.path.join(os.path.dirname(currentpath), 'Data')
+    return datapath
+
+def getDirContent(currentpath):
+    with os.scandir(currentpath) as entries:
+        for entry in entries:
+            print(entry.name)
+
+def validateDataFolder():
+    datapath = getDataPath()
+    if (os.path.isdir(datapath) == False):
+        os.mkdir(datapath)
+    print("\n\n---------------CURRENT EXISTED TO-DO-LIST FILES--------------------")
+    getDirContent(datapath)
+    print("\n\n-------------------------------------------------------------------\n\n") 
